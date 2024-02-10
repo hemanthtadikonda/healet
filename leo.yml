@@ -26,7 +26,7 @@
 
      -  name: Copy App content to default directory
         ansible.builtin.copy:
-           src: /usr/share/nginx/html/healet-html
+           src: /usr/share/nginx/html/healet-html/
            dest: /usr/share/nginx/html
 
      -  name: Enable & restart nginx
