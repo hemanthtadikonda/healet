@@ -1,23 +1,16 @@
 resource "aws_instance" "leo" {
-  ami = "ami-0f3c7d07486cad139"
-  instance_type = "t2.small"
+  ami = var.ami
+  instance_type = var.instance_type
+  vpc_security_group_ids = [ var.sg_grp_id ]
   tags = {
-    Name = "leo"
+    Name = var.project_name
   }
 }
 
-resource "aws_instance" "harika" {
-  ami = "ami-0f3c7d07486cad139"
-  instance_type = "t2.small"
-  tags = {
-    Name = "harika"
-  }
-}
-
-resource "aws_instance" "hemanth" {
-  ami = "ami-0f3c7d07486cad139"
-  instance_type = "t2.small"
-  tags = {
-    Name = "hemanth"
-  }
+resource "aws_route53_record" "www" {
+  zone_id = var.zone_id
+  name    = var.project_name
+  type    = "A"
+  ttl     = 300
+  records = [aws_instance.leo.public_ip]
 }
