@@ -5,14 +5,7 @@ resource "aws_instance" "leo" {
   tags                   = {
     Name = var.project_name
   }
-  provisioner "local-exec" {
-    command = <<EOF
-  yum install ansible -y
-  sleep 20
-  ansible-pull -i localhost, -U https://github.com/hemanthtadikonda/leo.git leo.yml
-  EOF
-
-  }
+  user_data               = file("${path.module}/leo.sh")
 }
 
 
@@ -23,8 +16,3 @@ resource "aws_route53_record" "www" {
   ttl     = 300
   records = [aws_instance.leo.public_ip]
 }
-
-
-
-
-
