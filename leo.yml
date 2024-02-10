@@ -1,0 +1,45 @@
+- name: Healet configuration
+  hosts: all
+  become: true
+  tasks:
+     -  name: Install the latest version of nginx
+        ansible.builtin.yum:
+           name: nginx
+           state: installed
+
+     -  name: Recursively remove default content dir
+        ansible.builtin.file:
+           path: /usr/share/nginx/html
+           state: absent
+
+     -  name: Create a directory App Directory
+        ansible.builtin.file:
+           path: /usr/share/nginx/html
+           state: directory
+           mode: '0755'
+
+     -  name: Downlaod App content
+        ansible.builtin.unarchive:
+           src: https://www.free-css.com/assets/files/free-css-templates/download/page296/healet.zip
+           dest: /usr/share/nginx/html
+           remote_src: yes
+
+     -  name: Copy App content to default directory
+        ansible.builtin.copy:
+           src: /usr/share/nginx/html/healet-html
+           dest: /usr/share/nginx/html
+
+     -  name: Enable & restart nginx
+        ansible.builtin.systemd_service:
+           name: nginx
+           state: restarted
+           enabled: true
+
+
+
+
+
+
+
+
+
